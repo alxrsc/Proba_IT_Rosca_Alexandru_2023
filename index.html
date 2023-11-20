@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poll IT</title>
+    <link rel="icon" href="imgs/logo.svg">
+    <style>
+        html {
+            background-image: url('imgs/background.svg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100%;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            /* Prevent horizontal scrolling */
+            min-width: 100%;
+            /* Ensure at least full viewport width */
+        }
+
+
+        nav {
+            display: flex;
+            position: fixed;
+            align-items: center;
+            padding: 1em 1.440em;
+            width: 100%;
+            height: auto;
+            background-color: #FFFFFF;
+            text-align: right;
+            z-index: 3;
+        }
+
+        nav a {
+            color: #04395E;
+            text-decoration: none;
+            padding: 0.5em 2em;
+            margin-right: 30px;
+            margin-left: -30px;
+            border-radius: 8px;
+            font-size: 18px;
+            z-index: 3;
+        }
+
+        .logo {
+            margin-right: auto;
+            z-index: 3;
+        }
+
+        nav a:hover {
+            background-color: #777;
+        }
+
+        section {
+            padding: 20px;
+        }
+
+        footer {
+            background-color: #FF1F66;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 1.5em;
+            height: 2%;
+            /* Adjusted height */
+            width: 100%;
+            justify-content: center;
+            z-index: 1;
+            position: absolute;
+            bottom: 0;
+        }
+
+        footer a {
+            display: flex;
+            background: none;
+            border: none;
+            padding: 1.5em;
+            border-radius: 8px;
+            cursor: pointer;
+            transform: scale(0.5);
+            align-items: center;
+            z-index: 1;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(217, 217, 217, 0.5);
+            z-index: 2;
+        }
+
+        /* footer-ul dispare cand apare popup de login sau register */
+        body.popup-active footer {
+            display: none;
+        }
+
+        /* Styling for the login popup */
+        .login-popup {
+            display: none;
+            position: fixed;
+            color: #FFFFFF;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #04395E;
+            padding: 20px;
+            border-radius: 22px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 3;
+            /* Higher z-index than overlay */
+            text-align: center;
+            font-size: 25px;
+            color: white;
+            width: 20%;
+            /* Use a percentage value for responsiveness */
+            height: auto;
+        }
+
+        .login-popup h2 {
+            margin-bottom: 25px;
+        }
+
+        .login-popup input {
+            width: calc(100% - 20px);
+            /* Adjusted width with side margin */
+            padding: 15px;
+            margin: 5px 10px;
+            /* Added side margin */
+            box-sizing: border-box;
+            background-color: transparent;
+            border-color: #FFFFFF;
+            border-radius: 9px;
+            border-width: 3px;
+            color: white;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .login-popup button {
+            background-color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 35%;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .login-popup .close-button {
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .register-popup {
+            display: none;
+            position: fixed;
+            color: #FFFFFF;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #04395E;
+            padding: 20px;
+            border-radius: 22px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 3;
+            /* Higher z-index than overlay */
+            text-align: center;
+            font-size: 25px;
+            color: white;
+            width: 20%;
+            /* Use a percentage value for responsiveness */
+            height: auto;
+        }
+
+        .register-popup h2 {
+            margin-bottom: 25px;
+        }
+
+        .register-popup input {
+            width: calc(100% - 20px);
+            /* Adjusted width with side margin */
+            padding: 15px;
+            margin: 5px 10px;
+            /* Added side margin */
+            box-sizing: border-box;
+            background-color: transparent;
+            border-color: #FFFFFF;
+            border-radius: 9px;
+            border-width: 3px;
+            color: white;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .register-popup button {
+            background-color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 35%;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .register-popup .close-button {
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .poll-popup {
+            display: none;
+            position: fixed;
+            color: #FFFFFF;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #04395E;
+            padding: 20px;
+            border-radius: 22px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 3;
+            /* Higher z-index than overlay */
+            text-align: center;
+            font-size: 25px;
+            color: white;
+            width: 50%;
+            /* Use a percentage value for responsiveness */
+            height: auto;
+        }
+
+        .poll-popup h2 {
+            margin-bottom: 25px;
+        }
+
+        .poll-popup input {
+            width: calc(100% - 20px);
+            /* Adjusted width with side margin */
+            padding: 15px;
+            margin: 5px 10px;
+            /* Added side margin */
+            box-sizing: border-box;
+            background-color: transparent;
+            border-color: #FFFFFF;
+            border-radius: 4px;
+            border-width: 3px;
+            color: white;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .poll-popup button {
+            background-color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 35%;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .poll-popup .close-button {
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <nav>
+        <img src="imgs/logo.svg" class="logo" onclick="refreshPage()">
+        <a href="#" onclick="openLoginPopup()" id="loginBtn">Login</a>
+        <a href="#" onclick="openRegisterPopup()" id="registerBtn">Register</a>
+        <a href="#" id="createPollBtn" style="display: none;" onclick="openPollPopup()">Create Poll</a>
+        <a href="#" id="logoutBtn" style="display: none;" onclick="logout()">Logout</a>
+    </nav>
+
+    <div class="overlay" id="overlay" onclick="closePopup()"></div>
+
+    <div id="loginPopup" class="login-popup">
+        <span class="close-button" onclick="closePopup()">&times;</span>
+        <h2>Login</h2>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <input type="text" id="loginEmail" placeholder="Email">
+            <input type="password" id="loginPassword" placeholder="Password">
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <div id="registerPopup" class="register-popup">
+        <span class="close-button" onclick="closeRegisterPopup()">&times;</span>
+        <h2>Register</h2>
+        <form id="registerForm" onsubmit="handleRegister(event)">
+            <input type="text" id="registerEmail" placeholder="Email">
+            <input type="password" id="registerPassword" placeholder="Password">
+            <input type="password" id="confirmPassword" placeholder="Confirm Password">
+            <button type="submit">Register</button>
+        </form>
+    </div>
+    <div id="pollPopup" class="poll-popup">
+        <span class="close-button" onclick="closePollPopup()">&times;</span>
+        <h2>Create Poll</h2>
+        <form id="createPollForm" onsubmit="handleCreatePoll(event)">
+            <input type="text" id="pollQuestion" placeholder="Poll Question">
+            
+            <label for="responseType">Response Type:</label>
+            <br>
+            <style>
+                label {
+                    display: flex;
+                    align-items: left;
+                    font-size: 14px; /* Adjust the font size of the label */
+                }
+            
+                input[type="checkbox"] {
+                    margin-right: 2px; /* Adjust the spacing between the checkbox and text */
+                }
+            </style>
+            <label for="singleResponse">Single Response</label>
+            <input type="checkbox" id="singleResponse" name="responseType">
+            <br>
+            <label for="multipleResponse">Multiple Response</label>
+            <input type="checkbox" id="multipleResponse" name="responseType">
+            <input type="text" id="option1" placeholder="Option 1">
+            <input type="text" id="option2" placeholder="Option 2">
+            <input type="text" id="option3" placeholder="Option 3">
+            <!-- Add more input fields for additional options as needed -->
+
+            <button type="submit">Create Poll</button>
+        </form>
+    </div>
+
+    <script>
+        let isLoggedIn = false;
+    </script>
+    <script>
+        // Function to clear textbox contents
+        function clearTextboxContents() {
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+
+
+        }
+    </script>
+
+    <script>
+        // login popup functions
+        function openLoginPopup() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('loginPopup').style.display = 'block';
+            document.body.classList.add('popup-active');
+        }
+
+        function closePopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('loginPopup').style.display = 'none';
+            document.body.classList.remove('popup-active');
+            clearTextboxContents();
+        }
+
+        // Close the popup if the overlay is clicked
+        document.getElementById('overlay').addEventListener('click', function (event) {
+            if (event.target === this) {
+                closePopup();
+            }
+        });
+
+        // Close the popup if the Escape key is pressed
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closePopup();
+            }
+        });
+    </script>
+
+    <script>
+
+        function updateButtonVisibility() {
+            const loginBtn = document.getElementById('loginBtn');
+            const registerBtn = document.getElementById('registerBtn');
+            const createPollBtn = document.getElementById('createPollBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const storedLoginStatus = localStorage.getItem('isLoggedIn');
+            isLoggedIn = storedLoginStatus === 'true';
+
+            if (isLoggedIn) {
+                // User is logged in
+                loginBtn.style.display = 'none';
+                registerBtn.style.display = 'none';
+                createPollBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'inline-block';
+            } else {
+                // User is not logged in
+                loginBtn.style.display = 'inline-block';
+                registerBtn.style.display = 'inline-block';
+                createPollBtn.style.display = 'none';
+                logoutBtn.style.display = 'none';
+            }
+        }
+        window.addEventListener('load', updateButtonVisibility);
+    </script>
+
+    <script>
+        /// login handler
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            fetch('http://localhost:5001/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Login successful');
+                        closePopup();
+
+                        // Set isLoggedIn to true
+                        isLoggedIn = true;
+
+                        // Store the login status in localStorage
+                        localStorage.setItem('isLoggedIn', 'true');
+
+                        // Update button visibility
+                        updateButtonVisibility();
+                    } else {
+                        alert('Login failed: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during login:', error);
+                });
+
+        }
+
+    </script>
+
+
+    <script>
+        // register pop-up functions
+
+        function openRegisterPopup() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('registerPopup').style.display = 'block';
+            document.body.classList.add('popup-active');
+        }
+
+        function closeRegisterPopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('registerPopup').style.display = 'none';
+            document.body.classList.remove('popup-active');
+            clearTextboxContents();
+        }
+
+        document.getElementById('overlay').addEventListener('click', function (event) {
+            if (event.target === this) {
+                closeRegisterPopup();
+            }
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeRegisterPopup();
+            }
+        });
+    </script>
+
+    <script>
+        // register handler
+        function handleRegistration() {
+            // Set isLoggedIn to true upon successful registration
+            isLoggedIn = true;
+            // Update button visibility
+            updateButtonVisibility();
+        }
+        function handleRegister(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match.');
+                return;
+            }
+
+            fetch('http://localhost:5001/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Registration successful');  // You can redirect or perform other actions here
+                        closeRegisterPopup();
+                    } else {
+                        alert('Registration failed: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during registration:', error);
+                });
+        }
+    </script>
+
+    <script>
+        // create poll popup
+        function openPollPopup() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('pollPopup').style.display = 'block';
+            document.body.classList.add('popup-active');
+        }
+
+        function closePollPopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('pollPopup').style.display = 'none';
+            document.body.classList.remove('popup-active');
+            clearTextboxContents();
+        }
+
+        document.getElementById('overlay').addEventListener('click', function (event) {
+            if (event.target === this) {
+                closePollPopup();
+            }
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closePollPopup();
+            }
+        });
+
+        // Function to handle poll creation
+        function handleCreatePoll(event) {
+            event.preventDefault();
+
+            const pollQuestion = document.getElementById('pollQuestion').value;
+            const options = document.getElementById('options').value;
+            const singleResponse = document.getElementById('singleResponse').checked;
+
+            // Make a POST request to create a new poll
+            fetch('http://localhost:5001/api/createPoll', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ question: pollQuestion, options, singleResponse }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Poll created successfully');
+                        // Add the new poll to the main page
+                        addPollToMainPage(data.poll);
+                    } else {
+                        alert('Poll creation failed: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during poll creation:', error);
+                });
+        }
+
+        // Function to get all polls from the server and display them on the main page
+        function getAllPolls() {
+            fetch('http://localhost:5001/api/getPolls')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Add each poll to the main page
+                        data.polls.forEach(poll => addPollToMainPage(poll));
+                    } else {
+                        console.error('Error getting polls:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error getting polls:', error);
+                });
+        }
+
+        // Call getAllPolls when the page loads to fetch and display existing polls
+        window.addEventListener('load', getAllPolls);
+    </script>
+
+    <script>
+        // Function to generate a unique ID (you can use a library or your own logic)
+        function generateUniqueId() {
+            return '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Function to create a new poll
+        function createPoll(question, options, singleResponse) {
+            // Implement the logic to send the poll data to the server
+            // Assume the server responds with the created poll
+            const newPoll = {
+                id: generateUniqueId(),
+                question,
+                options,
+                singleResponse,
+                votes: {},
+            };
+
+            // Add the new poll to the main page
+            addPollToMainPage(newPoll);
+        }
+
+        // Function to add a poll to the main page
+        function addPollToMainPage(poll) {
+            const pollSection = document.getElementById('pollSection');
+
+            // Create HTML elements to represent the poll
+            const pollElement = document.createElement('div');
+            pollElement.id = poll.id; // Set a unique ID for the poll element
+            pollElement.innerHTML = `
+        <h3>${poll.question}</h3>
+        <ul>
+            ${poll.options.map(option => `<li><button onclick="vote('${poll.id}', '${option}')">${option}</button></li>`).join('')}
+        </ul>
+    `;
+
+            // Append the poll to the poll section
+            pollSection.appendChild(pollElement);
+        }
+
+        // Function to handle user voting
+        function vote(pollId, option) {
+            // Implement the logic to send the vote data to the server
+            // Assume the server responds with the updated poll data
+            const updatedPoll = {
+                id: pollId,
+                // Include the updated votes data received from the server
+            };
+
+            // Update the poll on the main page with the new vote data
+            updatePollOnMainPage(updatedPoll);
+        }
+
+        // Function to update a poll on the main page with new vote data
+        function updatePollOnMainPage(updatedPoll) {
+            const pollSection = document.getElementById('pollSection');
+            const pollElement = document.getElementById(updatedPoll.id);
+
+            // Update the votes data in the poll element
+            // You may need to modify this based on your actual data structure
+            // For example, you might use a data attribute to store the poll ID
+            const votesElement = pollElement.querySelector('ul');
+            // Implement the logic to update the votes count based on updatedPoll.votes
+
+            // Update the poll on the main page
+            pollSection.replaceChild(pollElement, pollElement);
+        }
+    </script>
+
+    <section id="pollSection">
+        <!-- Polls will be dynamically added here -->
+    </section>
+
+
+    <script>
+        // logout function
+        function logout() {
+            // Clear the isLoggedIn status in localStorage
+            localStorage.removeItem('isLoggedIn');
+
+            // Update the isLoggedIn variable
+            isLoggedIn = false;
+
+            // Update button visibility
+            updateButtonVisibility();
+        }
+    </script>
+
+    <script>
+        // refresh when logo is pressed
+        function refreshPage() {
+            location.reload(true);
+        }
+
+    </script>
+
+    <footer>
+        <a href="https://www.twitch.tv/lsac_bucuresti/" target="_blank">
+            <img src="imgs/mdi_twitch.svg" alt="Twitch Icon">
+        </a>
+        <a href="https://www.instagram.com/lsacbucuresti/" target="_blank">
+            <img src="imgs/mdi_instagram.svg" alt="Instagram Icon">
+        </a>
+        <a href="https://www.facebook.com/LsacBucuresti" target="_blank">
+            <img src="imgs/uil_facebook.svg" alt="Facebook Icon">
+        </a>
+    </footer>
+
+</body>
+
+</html>
