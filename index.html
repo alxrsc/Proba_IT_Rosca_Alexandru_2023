@@ -20,9 +20,7 @@
             margin: 0;
             padding: 0;
             overflow-x: hidden;
-            /* Prevent horizontal scrolling */
             min-width: 100%;
-            /* Ensure at least full viewport width */
         }
 
 
@@ -69,7 +67,6 @@
             align-items: center;
             padding: 1.5em;
             height: 2%;
-            /* Adjusted height */
             width: 100%;
             justify-content: center;
             z-index: 1;
@@ -100,7 +97,7 @@
             z-index: 2;
         }
 
-        /* footer-ul dispare cand apare popup de login sau register */
+        /* Footer disappears while login, register, create poll popup open */
         body.popup-active footer {
             display: none;
         }
@@ -123,7 +120,6 @@
             font-size: 25px;
             color: white;
             width: 20%;
-            /* Use a percentage value for responsiveness */
             height: auto;
         }
 
@@ -133,10 +129,8 @@
 
         .login-popup input {
             width: calc(100% - 20px);
-            /* Adjusted width with side margin */
             padding: 15px;
             margin: 5px 10px;
-            /* Added side margin */
             box-sizing: border-box;
             background-color: transparent;
             border-color: #FFFFFF;
@@ -194,10 +188,8 @@
 
         .register-popup input {
             width: calc(100% - 20px);
-            /* Adjusted width with side margin */
             padding: 15px;
             margin: 5px 10px;
-            /* Added side margin */
             box-sizing: border-box;
             background-color: transparent;
             border-color: #FFFFFF;
@@ -236,37 +228,43 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: #04395E;
-            padding: 20px;
-            border-radius: 22px;
+            padding: 1.2vw;
+            /* Use a percentage of viewport width for padding */
+            border-radius: 1vw;
+            /* Use a percentage of viewport width for border radius */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             z-index: 3;
-            /* Higher z-index than overlay */
             text-align: center;
-            font-size: 25px;
-            color: white;
-            width: 50%;
-            /* Use a percentage value for responsiveness */
-            height: auto;
+            font-size: 1vw;
+            /* Use a percentage of viewport width for font size */
+            color: #fff;
+            width: 40%;
+            /* Set a default width for larger screens */
+            max-width: 40%;
+            /* Limit the width for smaller screens */
+            height: 70%;
+            overflow-y: auto;
+            /* Add vertical scroll if content overflows */
         }
 
         .poll-popup h2 {
-            margin-bottom: 25px;
+            margin-bottom: 5px;
         }
 
         .poll-popup input {
-            width: calc(100% - 20px);
-            /* Adjusted width with side margin */
+            /*width: calc(60% - 80px); */
             padding: 15px;
-            margin: 5px 10px;
-            /* Added side margin */
+            margin: 0px 10px;
+            width: 35vw;
+            height: 1vw;
             box-sizing: border-box;
-            background-color: transparent;
+            background: #FFFFFF7D;
             border-color: #FFFFFF;
             border-radius: 4px;
             border-width: 3px;
-            color: white;
-            font-size: 20px;
-            margin-top: 20px;
+            color: rgba(255, 255, 255, 1);
+            font-size: 1vw;
+            margin-top: 1vw;
         }
 
         .poll-popup button {
@@ -277,16 +275,27 @@
             cursor: pointer;
             width: 35%;
             font-size: 20px;
-            margin-top: 20px;
+            margin-top: 2vw;
         }
 
         .poll-popup .close-button {
             position: absolute;
             top: 5px;
             right: 15px;
-            font-size: 40px;
+            width: 10vw;
+            height: 2vw;
+            font-size: 2vw;
             color: white;
             cursor: pointer;
+            margin-top: 0.5vw;
+            margin-right: -4vw;
+        }
+
+        @media (max-width: 600px) {
+            .poll-popup {
+                width: 90%;
+                /* Adjust the width for smaller screens */
+            }
         }
     </style>
 
@@ -329,29 +338,72 @@
         <h2>Create Poll</h2>
         <form id="createPollForm" onsubmit="handleCreatePoll(event)">
             <input type="text" id="pollQuestion" placeholder="Poll Question">
-            
+
             <label for="responseType">Response Type:</label>
             <br>
             <style>
+                input[type="text"] {
+                    margin-bottom: 1vw;
+                }
+
+                input[type="checkbox"] {
+                    appearance: none;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    width: 1.5vw;
+                    /* 1% of the viewport width */
+                    height: 1.5vw;
+                    /* 1% of the viewport width */
+                    border: 2px solid #FFFFFF;
+                    border-radius: 50%;
+                    background-color: transparent;
+                    outline: none;
+                    cursor: pointer;
+                    position: relative;
+                    padding: 0;
+                    box-sizing: border-box;
+                }
+
+                input[type="checkbox"]:checked {
+                    background-color: transparent;
+                    border-color: #FFFFFF;
+                }
+
+                input[type="checkbox"]:checked::before {
+                    content: "";
+                    position: absolute;
+                    width: 1vw;
+                    /* Adjusted relative size of the inner circle */
+                    height: 1vw;
+                    /* Adjusted relative size of the inner circle */
+                    border-radius: 50%;
+                    background-color: #fff;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                }
+
                 label {
                     display: flex;
-                    align-items: left;
-                    font-size: 14px; /* Adjust the font size of the label */
-                }
-            
-                input[type="checkbox"] {
-                    margin-right: 2px; /* Adjust the spacing between the checkbox and text */
+                    align-items: center;
+                    font-size: 1vw;
+                    margin-top: 0.2vw;
+                    /* Adjust the font size relative to the viewport width */
                 }
             </style>
-            <label for="singleResponse">Single Response</label>
-            <input type="checkbox" id="singleResponse" name="responseType">
-            <br>
-            <label for="multipleResponse">Multiple Response</label>
-            <input type="checkbox" id="multipleResponse" name="responseType">
+
+            <label>
+                <input type="checkbox" id="singleResponse" name="responseType">
+                Single Response
+            </label>
+
+            <label>
+                <input type="checkbox" id="multipleResponse" name="responseType">
+                Multiple Response
+            </label>
             <input type="text" id="option1" placeholder="Option 1">
             <input type="text" id="option2" placeholder="Option 2">
             <input type="text" id="option3" placeholder="Option 3">
-            <!-- Add more input fields for additional options as needed -->
 
             <button type="submit">Create Poll</button>
         </form>
@@ -624,15 +676,13 @@
     </script>
 
     <script>
-        // Function to generate a unique ID (you can use a library or your own logic)
+        // Function to generate a unique ID
         function generateUniqueId() {
             return '_' + Math.random().toString(36).substr(2, 9);
         }
 
         // Function to create a new poll
         function createPoll(question, options, singleResponse) {
-            // Implement the logic to send the poll data to the server
-            // Assume the server responds with the created poll
             const newPoll = {
                 id: generateUniqueId(),
                 question,
@@ -665,11 +715,8 @@
 
         // Function to handle user voting
         function vote(pollId, option) {
-            // Implement the logic to send the vote data to the server
-            // Assume the server responds with the updated poll data
             const updatedPoll = {
                 id: pollId,
-                // Include the updated votes data received from the server
             };
 
             // Update the poll on the main page with the new vote data
@@ -680,12 +727,7 @@
         function updatePollOnMainPage(updatedPoll) {
             const pollSection = document.getElementById('pollSection');
             const pollElement = document.getElementById(updatedPoll.id);
-
-            // Update the votes data in the poll element
-            // You may need to modify this based on your actual data structure
-            // For example, you might use a data attribute to store the poll ID
             const votesElement = pollElement.querySelector('ul');
-            // Implement the logic to update the votes count based on updatedPoll.votes
 
             // Update the poll on the main page
             pollSection.replaceChild(pollElement, pollElement);
