@@ -8,9 +8,9 @@ pana acum:
 	-la apasarea logoului se da refresh paginii
 	-footer-ul si linkurile catre social media functioneaza
 	-ar trebui sa functioneze si scalarea paginii in functie de dimensiunea ecranului sau tabului
+	-createpoll popup are o forma relativ decenta, nu tocmai conform figma
 
 in lucru:
-	-popup-ul de Create Poll
 	-sa functioneze efectiv crearea unui poll
 
 vor urma:

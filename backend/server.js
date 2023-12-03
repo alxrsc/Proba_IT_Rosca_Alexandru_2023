@@ -5,35 +5,68 @@ const bcrypt = require('bcrypt');
 const app = express();
 const PORT = process.env.PORT || 5001;
 const cors = require('cors');
+const { v4: uuidv4 } = require('uuid');
 
-const { MongoClient } = require('mongodb');
-
-const uri = 'mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.2';
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
+// Connect to the MongoDB database
+mongoose.connect('mongodb://localhost:27017/pollit', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false
+})
+  .then(() => console.log('Connected to the database'))
+  .catch(error => console.error('Error connecting to the database:', error));
 
 app.use(cors());
 app.use(bodyParser.json());
 
-let polls = [];
+// Schema for Polls
+const pollSchema = new mongoose.Schema({
+  id: String,
+  question: String,
+  options: [String],
+  singleResponse: Boolean,
+  votes: Object,
+});
+
+const PollModel = mongoose.model('Poll', pollSchema);
+
+// Function to generate unique IDs
+function generateUniqueId() {
+  return uuidv4();
+}
 
 // Endpoint to create a new poll
-app.post('/api/createPoll', (req, res) => {
-  const { question, options, singleResponse } = req.body;
-  const newPoll = {
-    id: generateUniqueId(),
-    question,
-    options: options.split(',').map(option => option.trim()),
-    singleResponse,
-    votes: {},
-  };
-  polls.push(newPoll);
-  res.json({ success: true, poll: newPoll });
+app.post('/api/createPoll', async (req, res) => {
+  const { question, options, responseType } = req.body;
+
+  try {
+    const newPoll = new PollModel({
+      id: generateUniqueId(),
+      question,
+      options: options.map(option => option.trim()),
+      responseType, // This can be 'single' or 'multiple'
+      votes: {},
+    });
+
+    await newPoll.save();
+
+    res.json({ success: true, poll: newPoll });
+  } catch (error) {
+    console.error('Error creating poll:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
 });
 
 // Endpoint to get all polls
-app.get('/api/getPolls', (req, res) => {
-  res.json({ success: true, polls });
+app.get('/api/getPolls', async (req, res) => {
+  try {
+    const polls = await PollModel.find({});
+    res.json({ success: true, polls });
+  } catch (error) {
+    console.error('Error getting polls:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
 });
 
 // Endpoint to handle user votes
@@ -43,26 +76,22 @@ app.post('/api/vote', (req, res) => {
   if (!poll) {
     return res.json({ success: false, message: 'Poll not found' });
   }
-  
+
   res.json({ success: true, updatedPoll: poll });
 });
 
 async function connectToDatabase() {
   try {
-    await client.connect();
+    await mongoose.connect('mongodb://localhost:27017/pollit', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log('Connected to the database');
   } catch (error) {
     console.error('Error connecting to the database:', error);
   }
 }
-
 connectToDatabase();
-
-mongoose.connect('mongodb://localhost:27017/pollit', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -82,7 +111,7 @@ app.post('/api/register', async (req, res) => {
     }
 
     // Hash and salt the password before storing it
-    const hashedPassword = await bcrypt.hash(password, 10); // Adjust the salt rounds as needed
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // If the user doesn't exist, proceed with registration
     const newUser = new UserModel({ email, password: hashedPassword });
@@ -102,7 +131,7 @@ app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
 
     // Retrieve user data from the database
-    const user = await client.db('pollit').collection('users').findOne({ email });
+    const user = await UserModel.findOne({ email });
 
     if (!user) {
       res.json({ success: false, message: 'User not found' });
@@ -122,6 +151,17 @@ app.post('/api/login', async (req, res) => {
     res.json({ success: false, message: 'Login failed' });
   }
 });
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something went wrong!');
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+// Function to generate unique IDs
+function generateUniqueId() {
+  return uuidv4();
+}

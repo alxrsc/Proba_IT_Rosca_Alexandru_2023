@@ -117,28 +117,32 @@
             z-index: 3;
             /* Higher z-index than overlay */
             text-align: center;
-            font-size: 25px;
             color: white;
-            width: 20%;
-            height: auto;
+            width: 30vw;
+            height: 30vw;
+            font-size: 1.5vw;
+            overflow-y: auto;
         }
 
         .login-popup h2 {
+            font-size: 3vw;
             margin-bottom: 25px;
         }
 
         .login-popup input {
             width: calc(100% - 20px);
             padding: 15px;
-            margin: 5px 10px;
+            margin: 5px;
             box-sizing: border-box;
             background-color: transparent;
             border-color: #FFFFFF;
             border-radius: 9px;
             border-width: 3px;
             color: white;
-            font-size: 20px;
-            margin-top: 20px;
+            font-size: 2vw;
+            margin-top: 1vw;
+            height: 3vw;
+            width: 30vw;
         }
 
         .login-popup button {
@@ -148,7 +152,7 @@
             border-radius: 8px;
             cursor: pointer;
             width: 35%;
-            font-size: 20px;
+            font-size: 2vw;
             margin-top: 20px;
         }
 
@@ -156,7 +160,7 @@
             position: absolute;
             top: 5px;
             right: 15px;
-            font-size: 40px;
+            font-size: 3vw;
             color: white;
             cursor: pointer;
         }
@@ -175,11 +179,11 @@
             z-index: 3;
             /* Higher z-index than overlay */
             text-align: center;
-            font-size: 25px;
+            font-size: 2vw;
             color: white;
-            width: 20%;
-            /* Use a percentage value for responsiveness */
-            height: auto;
+            width: 30vw;
+            height: 40vw;
+            overflow-y: auto;
         }
 
         .register-popup h2 {
@@ -187,17 +191,18 @@
         }
 
         .register-popup input {
-            width: calc(100% - 20px);
             padding: 15px;
-            margin: 5px 10px;
+            margin: 5px;
             box-sizing: border-box;
             background-color: transparent;
             border-color: #FFFFFF;
             border-radius: 9px;
             border-width: 3px;
             color: white;
-            font-size: 20px;
+            font-size: 2vw;
             margin-top: 20px;
+            height: 3vw;
+            width: 30vw;
         }
 
         .register-popup button {
@@ -206,8 +211,8 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            width: 35%;
-            font-size: 20px;
+            width: 15vw;
+            font-size: 2vw;
             margin-top: 20px;
         }
 
@@ -215,7 +220,7 @@
             position: absolute;
             top: 5px;
             right: 15px;
-            font-size: 40px;
+            font-size: 4vw;
             color: white;
             cursor: pointer;
         }
@@ -229,22 +234,16 @@
             transform: translate(-50%, -50%);
             background-color: #04395E;
             padding: 1.2vw;
-            /* Use a percentage of viewport width for padding */
             border-radius: 1vw;
-            /* Use a percentage of viewport width for border radius */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             z-index: 3;
             text-align: center;
-            font-size: 1vw;
-            /* Use a percentage of viewport width for font size */
+            font-size: 1.5vw;
             color: #fff;
-            width: 40%;
-            /* Set a default width for larger screens */
+            width: 80vw;
             max-width: 40%;
-            /* Limit the width for smaller screens */
-            height: 70%;
+            height: 40vw;
             overflow-y: auto;
-            /* Add vertical scroll if content overflows */
         }
 
         .poll-popup h2 {
@@ -252,9 +251,7 @@
         }
 
         .poll-popup input {
-            /*width: calc(60% - 80px); */
             padding: 15px;
-            margin: 0px 10px;
             width: 35vw;
             height: 1vw;
             box-sizing: border-box;
@@ -284,7 +281,7 @@
             right: 15px;
             width: 10vw;
             height: 2vw;
-            font-size: 2vw;
+            font-size: 3vw;
             color: white;
             cursor: pointer;
             margin-top: 0.5vw;
@@ -338,69 +335,76 @@
         <h2>Create Poll</h2>
         <form id="createPollForm" onsubmit="handleCreatePoll(event)">
             <input type="text" id="pollQuestion" placeholder="Poll Question">
-
-            <label for="responseType">Response Type:</label>
             <br>
+
+            <div class="radio-container">
+                <label for="votingType">Voting type</label>
+                <br>
+                <div class="checkbox-line">
+                    <input type="radio" name="votingType" id="singleResponse" checked>
+                    <label for="singleResponse">Single choice</label>
+                </div>
+                <br>
+                <div class="checkbox-line">
+                    <input type="radio" name="votingType" id="multipleResponse">
+                    <label for="multipleResponse">Multiple choice</label>
+                </div>
+                <input type="hidden" id="responseType" name="responseType" value="single">
+            </div>
+
             <style>
-                input[type="text"] {
-                    margin-bottom: 1vw;
+                .radio-container {
+                    font-size: 1vw;
+                    margin-top: 0.1vw;
+                    margin-left: 2.8vw;
                 }
 
-                input[type="checkbox"] {
+                label {
+                    display: flex;
+                    align-items: left;
+                    margin-top: 1vw;
+                }
+
+                .checkbox-line {
+                    display: flex;
+                    align-items: center;
+                }
+
+                input[type="radio"] {
                     appearance: none;
                     -webkit-appearance: none;
                     -moz-appearance: none;
-                    width: 1.5vw;
-                    /* 1% of the viewport width */
-                    height: 1.5vw;
-                    /* 1% of the viewport width */
-                    border: 2px solid #FFFFFF;
+                    width: 1vw;
+                    height: 1vw;
+                    border: 1px solid #FFFFFF;
                     border-radius: 50%;
                     background-color: transparent;
                     outline: none;
                     cursor: pointer;
+                    margin-right: 0.5vw;
                     position: relative;
                     padding: 0;
                     box-sizing: border-box;
                 }
 
-                input[type="checkbox"]:checked {
+                input[type="radio"]:checked {
                     background-color: transparent;
                     border-color: #FFFFFF;
                 }
 
-                input[type="checkbox"]:checked::before {
+                input[type="radio"]:checked::before {
                     content: "";
                     position: absolute;
-                    width: 1vw;
-                    /* Adjusted relative size of the inner circle */
-                    height: 1vw;
-                    /* Adjusted relative size of the inner circle */
+                    width: 0.65vw;
+                    height: 0.65vw;
                     border-radius: 50%;
                     background-color: #fff;
                     top: 50%;
                     left: 50%;
                     transform: translate(-50%, -50%);
                 }
-
-                label {
-                    display: flex;
-                    align-items: center;
-                    font-size: 1vw;
-                    margin-top: 0.2vw;
-                    /* Adjust the font size relative to the viewport width */
-                }
             </style>
 
-            <label>
-                <input type="checkbox" id="singleResponse" name="responseType">
-                Single Response
-            </label>
-
-            <label>
-                <input type="checkbox" id="multipleResponse" name="responseType">
-                Multiple Response
-            </label>
             <input type="text" id="option1" placeholder="Option 1">
             <input type="text" id="option2" placeholder="Option 2">
             <input type="text" id="option3" placeholder="Option 3">
@@ -628,16 +632,29 @@
             event.preventDefault();
 
             const pollQuestion = document.getElementById('pollQuestion').value;
-            const options = document.getElementById('options').value;
+            const option1 = document.getElementById('option1').value;
+            const option2 = document.getElementById('option2').value;
+            const option3 = document.getElementById('option3').value;
             const singleResponse = document.getElementById('singleResponse').checked;
+            const multipleResponse = document.getElementById('multipleResponse').checked;
 
-            // Make a POST request to create a new poll
-            fetch('http://localhost:5001/api/createPoll', {
+            // Adjust based on the number of options
+            const options = [option1, option2, option3];
+
+            // Get the selected response type
+            const responseType = singleResponse ? 'single' : 'multiple';
+
+            // Make a POST request to create a new poll with responseType
+            fetch('/api/createPoll', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ question: pollQuestion, options, singleResponse }),
+                body: JSON.stringify({
+                    question: pollQuestion,
+                    options,
+                    responseType,
+                }),
             })
                 .then(response => response.json())
                 .then(data => {
@@ -712,6 +729,7 @@
             // Append the poll to the poll section
             pollSection.appendChild(pollElement);
         }
+
 
         // Function to handle user voting
         function vote(pollId, option) {
