@@ -9,10 +9,11 @@ pana acum:
 	-footer-ul si linkurile catre social media functioneaza
 	-ar trebui sa functioneze si scalarea paginii in functie de dimensiunea ecranului sau tabului
 	-createpoll popup are o forma relativ decenta, nu tocmai conform figma
+	-poll-urile sunt create
 
 in lucru:
-	-sa functioneze efectiv crearea unui poll
+	-ne confruntam cu un mic overflow de la polluri
+	-stilizarea chenarelor de poll
 
 vor urma:
-	-textul adaugat langa broscuta
-	-pagina de poll-uri
+	-sistemul de vot	

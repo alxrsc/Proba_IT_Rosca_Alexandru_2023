@@ -6,296 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Poll IT</title>
     <link rel="icon" href="imgs/logo.svg">
-    <style>
-        html {
-            background-image: url('imgs/background.svg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100%;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            min-width: 100%;
-        }
-
-
-        nav {
-            display: flex;
-            position: fixed;
-            align-items: center;
-            padding: 1em 1.440em;
-            width: 100%;
-            height: auto;
-            background-color: #FFFFFF;
-            text-align: right;
-            z-index: 3;
-        }
-
-        nav a {
-            color: #04395E;
-            text-decoration: none;
-            padding: 0.5em 2em;
-            margin-right: 30px;
-            margin-left: -30px;
-            border-radius: 8px;
-            font-size: 18px;
-            z-index: 3;
-        }
-
-        .logo {
-            margin-right: auto;
-            z-index: 3;
-        }
-
-        nav a:hover {
-            background-color: #777;
-        }
-
-        section {
-            padding: 20px;
-        }
-
-        footer {
-            background-color: #FF1F66;
-            color: white;
-            display: flex;
-            align-items: center;
-            padding: 1.5em;
-            height: 2%;
-            width: 100%;
-            justify-content: center;
-            z-index: 1;
-            position: absolute;
-            bottom: 0;
-        }
-
-        footer a {
-            display: flex;
-            background: none;
-            border: none;
-            padding: 1.5em;
-            border-radius: 8px;
-            cursor: pointer;
-            transform: scale(0.5);
-            align-items: center;
-            z-index: 1;
-        }
-
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(217, 217, 217, 0.5);
-            z-index: 2;
-        }
-
-        /* Footer disappears while login, register, create poll popup open */
-        body.popup-active footer {
-            display: none;
-        }
-
-        /* Styling for the login popup */
-        .login-popup {
-            display: none;
-            position: fixed;
-            color: #FFFFFF;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #04395E;
-            padding: 20px;
-            border-radius: 22px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            z-index: 3;
-            /* Higher z-index than overlay */
-            text-align: center;
-            color: white;
-            width: 30vw;
-            height: 30vw;
-            font-size: 1.5vw;
-            overflow-y: auto;
-        }
-
-        .login-popup h2 {
-            font-size: 3vw;
-            margin-bottom: 25px;
-        }
-
-        .login-popup input {
-            width: calc(100% - 20px);
-            padding: 15px;
-            margin: 5px;
-            box-sizing: border-box;
-            background-color: transparent;
-            border-color: #FFFFFF;
-            border-radius: 9px;
-            border-width: 3px;
-            color: white;
-            font-size: 2vw;
-            margin-top: 1vw;
-            height: 3vw;
-            width: 30vw;
-        }
-
-        .login-popup button {
-            background-color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 35%;
-            font-size: 2vw;
-            margin-top: 20px;
-        }
-
-        .login-popup .close-button {
-            position: absolute;
-            top: 5px;
-            right: 15px;
-            font-size: 3vw;
-            color: white;
-            cursor: pointer;
-        }
-
-        .register-popup {
-            display: none;
-            position: fixed;
-            color: #FFFFFF;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #04395E;
-            padding: 20px;
-            border-radius: 22px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            z-index: 3;
-            /* Higher z-index than overlay */
-            text-align: center;
-            font-size: 2vw;
-            color: white;
-            width: 30vw;
-            height: 40vw;
-            overflow-y: auto;
-        }
-
-        .register-popup h2 {
-            margin-bottom: 25px;
-        }
-
-        .register-popup input {
-            padding: 15px;
-            margin: 5px;
-            box-sizing: border-box;
-            background-color: transparent;
-            border-color: #FFFFFF;
-            border-radius: 9px;
-            border-width: 3px;
-            color: white;
-            font-size: 2vw;
-            margin-top: 20px;
-            height: 3vw;
-            width: 30vw;
-        }
-
-        .register-popup button {
-            background-color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 15vw;
-            font-size: 2vw;
-            margin-top: 20px;
-        }
-
-        .register-popup .close-button {
-            position: absolute;
-            top: 5px;
-            right: 15px;
-            font-size: 4vw;
-            color: white;
-            cursor: pointer;
-        }
-
-        .poll-popup {
-            display: none;
-            position: fixed;
-            color: #FFFFFF;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #04395E;
-            padding: 1.2vw;
-            border-radius: 1vw;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            z-index: 3;
-            text-align: center;
-            font-size: 1.5vw;
-            color: #fff;
-            width: 80vw;
-            max-width: 40%;
-            height: 40vw;
-            overflow-y: auto;
-        }
-
-        .poll-popup h2 {
-            margin-bottom: 5px;
-        }
-
-        .poll-popup input {
-            padding: 15px;
-            width: 35vw;
-            height: 1vw;
-            box-sizing: border-box;
-            background: #FFFFFF7D;
-            border-color: #FFFFFF;
-            border-radius: 4px;
-            border-width: 3px;
-            color: rgba(255, 255, 255, 1);
-            font-size: 1vw;
-            margin-top: 1vw;
-        }
-
-        .poll-popup button {
-            background-color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 35%;
-            font-size: 20px;
-            margin-top: 2vw;
-        }
-
-        .poll-popup .close-button {
-            position: absolute;
-            top: 5px;
-            right: 15px;
-            width: 10vw;
-            height: 2vw;
-            font-size: 3vw;
-            color: white;
-            cursor: pointer;
-            margin-top: 0.5vw;
-            margin-right: -4vw;
-        }
-
-        @media (max-width: 600px) {
-            .poll-popup {
-                width: 90%;
-                /* Adjust the width for smaller screens */
-            }
-        }
-    </style>
-
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
 <body>
@@ -309,6 +20,13 @@
     </nav>
 
     <div class="overlay" id="overlay" onclick="closePopup()"></div>
+
+    <div class="custom-section">
+        <div class="text-container">
+            <p>Opiniile sunt mai importante ca niciodată. Platformele de sondaje permit organizatorilor să culeagă feedback direct de la audiența lor și să înțeleagă mai bine nevoile și dorințele acesteia.</p>
+        </div>
+        <img src="imgs/testoasa 1.svg" alt="Your Image">
+    </div>
 
     <div id="loginPopup" class="login-popup">
         <span class="close-button" onclick="closePopup()">&times;</span>
@@ -351,59 +69,6 @@
                 </div>
                 <input type="hidden" id="responseType" name="responseType" value="single">
             </div>
-
-            <style>
-                .radio-container {
-                    font-size: 1vw;
-                    margin-top: 0.1vw;
-                    margin-left: 2.8vw;
-                }
-
-                label {
-                    display: flex;
-                    align-items: left;
-                    margin-top: 1vw;
-                }
-
-                .checkbox-line {
-                    display: flex;
-                    align-items: center;
-                }
-
-                input[type="radio"] {
-                    appearance: none;
-                    -webkit-appearance: none;
-                    -moz-appearance: none;
-                    width: 1vw;
-                    height: 1vw;
-                    border: 1px solid #FFFFFF;
-                    border-radius: 50%;
-                    background-color: transparent;
-                    outline: none;
-                    cursor: pointer;
-                    margin-right: 0.5vw;
-                    position: relative;
-                    padding: 0;
-                    box-sizing: border-box;
-                }
-
-                input[type="radio"]:checked {
-                    background-color: transparent;
-                    border-color: #FFFFFF;
-                }
-
-                input[type="radio"]:checked::before {
-                    content: "";
-                    position: absolute;
-                    width: 0.65vw;
-                    height: 0.65vw;
-                    border-radius: 50%;
-                    background-color: #fff;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                }
-            </style>
 
             <input type="text" id="option1" placeholder="Option 1">
             <input type="text" id="option2" placeholder="Option 2">
@@ -639,13 +304,14 @@
             const multipleResponse = document.getElementById('multipleResponse').checked;
 
             // Adjust based on the number of options
-            const options = [option1, option2, option3];
+            const options = [option1, option2, option3].map(option => option.trim());
+
 
             // Get the selected response type
             const responseType = singleResponse ? 'single' : 'multiple';
 
             // Make a POST request to create a new poll with responseType
-            fetch('/api/createPoll', {
+            fetch('http://localhost:5001/api/createPoll', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -662,6 +328,8 @@
                         alert('Poll created successfully');
                         // Add the new poll to the main page
                         addPollToMainPage(data.poll);
+                        // Close the poll popup after successful creation
+                        closePollPopup();
                     } else {
                         alert('Poll creation failed: ' + data.message);
                     }
@@ -669,6 +337,86 @@
                 .catch(error => {
                     console.error('Error during poll creation:', error);
                 });
+        }
+
+
+
+
+        // Call getAllPolls when the page loads to fetch and display existing polls
+        window.addEventListener('load', getAllPolls);
+    </script>
+
+    <script>
+        // Function to generate a unique ID
+        function generateUniqueId() {
+            return '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Function to create a new poll
+        function createPollElement(poll) {
+            const pollElement = document.createElement('div');
+            pollElement.classList.add('poll');
+            pollElement.id = poll.id;
+
+            pollElement.innerHTML = `
+            <h3>${poll.question}</h3>
+            <ul id="options-${poll.id}">
+                ${poll.options.map(option => `
+                    <li>
+                        <label class="${poll.responseType === 'single' ? 'radio-container' : 'checkbox-container'}">
+                            ${option}
+                            <input type="${poll.responseType === 'single' ? 'radio' : 'checkbox'}" 
+                                   name="option-${poll.id}" 
+                                   value="${option}" 
+                                   onclick="vote('${poll.id}', '${option}', '${poll.responseType}')">
+                            <span class="checkmark"></span>
+                        </label>
+                    </li>`).join('')}
+            </ul>
+        `;
+
+            return pollElement;
+        }
+
+        // Function to add a poll to the main page
+        function addPollToMainPage(poll) {
+            const pollSection = document.getElementById('pollSection');
+            const pollElement = createPollElement(poll);
+
+            // Append the poll to the poll section
+            pollSection.appendChild(pollElement);
+        }
+
+        // Function to update a poll on the main page with new vote data
+        function updatePollOnMainPage(updatedPoll) {
+            const pollElement = createPollElement(updatedPoll);
+            const existingPollElement = document.getElementById(updatedPoll.id);
+
+            // Replace the existing poll with the updated one
+            existingPollElement.replaceWith(pollElement);
+        }
+
+        // Function to handle user voting
+        function vote(pollId, option, responseType) {
+            const selectedOption = document.querySelector(`#options-${pollId} [value="${option}"]`);
+
+            if (responseType === 'single') {
+                // Single choice logic: uncheck other options in the same poll
+                const options = document.querySelectorAll(`#options-${pollId} input`);
+                options.forEach(opt => {
+                    if (opt !== selectedOption) {
+                        opt.checked = false;
+                    }
+                });
+            } else if (responseType === 'multiple') {
+                // Multiple choice logic: handle multiple selected options
+                const selectedOptions = document.querySelectorAll(`#options-${pollId} input:checked`);
+                const selectedValues = Array.from(selectedOptions).map(opt => opt.value);
+                console.log('Selected options:', selectedValues);
+                // You can send a request to the server to record the vote
+            }
+
+            // Additional logic for other response types can be added here
         }
 
         // Function to get all polls from the server and display them on the main page
@@ -692,65 +440,6 @@
         window.addEventListener('load', getAllPolls);
     </script>
 
-    <script>
-        // Function to generate a unique ID
-        function generateUniqueId() {
-            return '_' + Math.random().toString(36).substr(2, 9);
-        }
-
-        // Function to create a new poll
-        function createPoll(question, options, singleResponse) {
-            const newPoll = {
-                id: generateUniqueId(),
-                question,
-                options,
-                singleResponse,
-                votes: {},
-            };
-
-            // Add the new poll to the main page
-            addPollToMainPage(newPoll);
-        }
-
-        // Function to add a poll to the main page
-        function addPollToMainPage(poll) {
-            const pollSection = document.getElementById('pollSection');
-
-            // Create HTML elements to represent the poll
-            const pollElement = document.createElement('div');
-            pollElement.id = poll.id; // Set a unique ID for the poll element
-            pollElement.innerHTML = `
-        <h3>${poll.question}</h3>
-        <ul>
-            ${poll.options.map(option => `<li><button onclick="vote('${poll.id}', '${option}')">${option}</button></li>`).join('')}
-        </ul>
-    `;
-
-            // Append the poll to the poll section
-            pollSection.appendChild(pollElement);
-        }
-
-
-        // Function to handle user voting
-        function vote(pollId, option) {
-            const updatedPoll = {
-                id: pollId,
-            };
-
-            // Update the poll on the main page with the new vote data
-            updatePollOnMainPage(updatedPoll);
-        }
-
-        // Function to update a poll on the main page with new vote data
-        function updatePollOnMainPage(updatedPoll) {
-            const pollSection = document.getElementById('pollSection');
-            const pollElement = document.getElementById(updatedPoll.id);
-            const votesElement = pollElement.querySelector('ul');
-
-            // Update the poll on the main page
-            pollSection.replaceChild(pollElement, pollElement);
-        }
-    </script>
 
     <section id="pollSection">
         <!-- Polls will be dynamically added here -->

@@ -36,49 +36,6 @@ function generateUniqueId() {
   return uuidv4();
 }
 
-// Endpoint to create a new poll
-app.post('/api/createPoll', async (req, res) => {
-  const { question, options, responseType } = req.body;
-
-  try {
-    const newPoll = new PollModel({
-      id: generateUniqueId(),
-      question,
-      options: options.map(option => option.trim()),
-      responseType, // This can be 'single' or 'multiple'
-      votes: {},
-    });
-
-    await newPoll.save();
-
-    res.json({ success: true, poll: newPoll });
-  } catch (error) {
-    console.error('Error creating poll:', error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
-  }
-});
-
-// Endpoint to get all polls
-app.get('/api/getPolls', async (req, res) => {
-  try {
-    const polls = await PollModel.find({});
-    res.json({ success: true, polls });
-  } catch (error) {
-    console.error('Error getting polls:', error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
-  }
-});
-
-// Endpoint to handle user votes
-app.post('/api/vote', (req, res) => {
-  const { pollId, option } = req.body;
-  const poll = polls.find(p => p.id === pollId);
-  if (!poll) {
-    return res.json({ success: false, message: 'Poll not found' });
-  }
-
-  res.json({ success: true, updatedPoll: poll });
-});
 
 async function connectToDatabase() {
   try {
@@ -86,8 +43,12 @@ async function connectToDatabase() {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
+    
+    
     console.log('Connected to the database');
-  } catch (error) {
+  } catch (error) {            
+
+
     console.error('Error connecting to the database:', error);
   }
 }
@@ -151,6 +112,52 @@ app.post('/api/login', async (req, res) => {
     res.json({ success: false, message: 'Login failed' });
   }
 });
+
+// Endpoint to create a new poll
+app.post('/api/createPoll', async (req, res) => {
+  const { question, options, responseType } = req.body;
+
+  try {
+    const newPoll = new PollModel({
+      id: generateUniqueId(),
+      question,
+      options: options.map(option => option.trim()), // Ensure each option is trimmed
+      responseType, // This can be 'single' or 'multiple'
+      votes: {},
+    });
+
+    await newPoll.save();
+
+    res.json({ success: true, poll: newPoll });
+  } catch (error) {
+    console.error('Error creating poll:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+
+// Endpoint to get all polls
+app.get('/api/getPolls', async (req, res) => {
+  try {
+    const polls = await PollModel.find({});
+    res.json({ success: true, polls });
+  } catch (error) {
+    console.error('Error getting polls:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+// Endpoint to handle user votes
+app.post('/api/vote', (req, res) => {
+  const { pollId, option } = req.body;
+  const poll = polls.find(p => p.id === pollId);
+  if (!poll) {
+    return res.json({ success: false, message: 'Poll not found' });
+  }
+
+  res.json({ success: true, updatedPoll: poll });
+});
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
