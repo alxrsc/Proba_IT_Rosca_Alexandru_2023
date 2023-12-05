@@ -43,12 +43,8 @@ async function connectToDatabase() {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    
-    
     console.log('Connected to the database');
-  } catch (error) {            
-
-
+  } catch (error) {
     console.error('Error connecting to the database:', error);
   }
 }
@@ -148,14 +144,27 @@ app.get('/api/getPolls', async (req, res) => {
 });
 
 // Endpoint to handle user votes
-app.post('/api/vote', (req, res) => {
+app.post('/api/vote', async (req, res) => {
   const { pollId, option } = req.body;
-  const poll = polls.find(p => p.id === pollId);
-  if (!poll) {
-    return res.json({ success: false, message: 'Poll not found' });
-  }
 
-  res.json({ success: true, updatedPoll: poll });
+  try {
+    const poll = await PollModel.findOne({ id: pollId });
+
+    if (!poll) {
+      return res.json({ success: false, message: 'Poll not found' });
+    }
+
+    // Update votes in the poll
+    poll.votes[option] = (poll.votes[option] || 0) + 1;
+
+    // Save the updated poll
+    await poll.save();
+
+    res.json({ success: true, updatedPoll: poll });
+  } catch (error) {
+    console.error('Error handling vote:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
 });
 
 

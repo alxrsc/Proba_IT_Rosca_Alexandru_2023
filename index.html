@@ -23,7 +23,8 @@
 
     <div class="custom-section">
         <div class="text-container">
-            <p>Opiniile sunt mai importante ca niciodată. Platformele de sondaje permit organizatorilor să culeagă feedback direct de la audiența lor și să înțeleagă mai bine nevoile și dorințele acesteia.</p>
+            <p>Opiniile sunt mai importante ca niciodată. Platformele de sondaje permit organizatorilor să culeagă
+                feedback direct de la audiența lor și să înțeleagă mai bine nevoile și dorințele acesteia.</p>
         </div>
         <img src="imgs/testoasa 1.svg" alt="Your Image">
     </div>
@@ -359,24 +360,37 @@
             pollElement.id = poll.id;
 
             pollElement.innerHTML = `
-            <h3>${poll.question}</h3>
-            <ul id="options-${poll.id}">
-                ${poll.options.map(option => `
-                    <li>
-                        <label class="${poll.responseType === 'single' ? 'radio-container' : 'checkbox-container'}">
-                            ${option}
-                            <input type="${poll.responseType === 'single' ? 'radio' : 'checkbox'}" 
-                                   name="option-${poll.id}" 
-                                   value="${option}" 
-                                   onclick="vote('${poll.id}', '${option}', '${poll.responseType}')">
-                            <span class="checkmark"></span>
-                        </label>
-                    </li>`).join('')}
-            </ul>
-        `;
+        <h3>${poll.question}</h3>
+        <ul id="options-${poll.id}">
+            ${poll.options.map(option => `
+                <li>
+                    <label class="checkbox-container">
+                        ${option}
+                        <input type="checkbox" 
+                            name="option-${poll.id}" 
+                            value="${option}" 
+                            onclick="vote('${poll.id}', '${option}', 'multiple')">
+                        <span class="checkmark"></span>
+                    </label>
+                </li>`).join('')}
+        </ul>
+        <button onclick="submitVotes('${poll.id}', 'multiple')">Submit Votes</button>
+    `;
 
             return pollElement;
         }
+        
+        function submitVotes(pollId, responseType) {
+    const selectedOptions = Array.from(document.querySelectorAll(`#options-${pollId} input[type="checkbox"]:checked`))
+        .map(checkbox => checkbox.value);
+
+    // Additional logic for handling checkbox votes can be added here
+    console.log(`Selected options in poll ${pollId}: ${selectedOptions.join(', ')}`);
+    
+    // You can then send the selectedOptions to your server for vote submission
+    // Update this part based on your server interaction
+}
+
 
         // Function to add a poll to the main page
         function addPollToMainPage(poll) {
